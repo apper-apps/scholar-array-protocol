@@ -1,0 +1,56 @@
+[
+  {
+    "Id": 1,
+    "classId": "1",
+    "name": "Quadratic Equations Test",
+    "category": "Test",
+    "weight": 25,
+    "dueDate": "2024-11-15",
+    "totalPoints": 100
+  },
+  {
+    "Id": 2,
+    "classId": "1",
+    "name": "Homework - Chapter 5",
+    "category": "Homework",
+    "weight": 10,
+    "dueDate": "2024-11-08",
+    "totalPoints": 50
+  },
+  {
+    "Id": 3,
+    "classId": "2",
+    "name": "Cell Structure Lab",
+    "category": "Lab",
+    "weight": 20,
+    "dueDate": "2024-11-12",
+    "totalPoints": 75
+  },
+  {
+    "Id": 4,
+    "classId": "2",
+    "name": "Midterm Exam",
+    "category": "Exam",
+    "weight": 30,
+    "dueDate": "2024-11-20",
+    "totalPoints": 150
+  },
+  {
+    "Id": 5,
+    "classId": "3",
+    "name": "Shakespeare Essay",
+    "category": "Essay",
+    "weight": 25,
+    "dueDate": "2024-11-18",
+    "totalPoints": 100
+  },
+  {
+    "Id": 6,
+    "classId": "4",
+    "name": "WWI Research Project",
+    "category": "Project",
+    "weight": 30,
+    "dueDate": "2024-11-25",
+    "totalPoints": 200
+  }
+]

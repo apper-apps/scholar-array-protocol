@@ -1,0 +1,90 @@
+[
+  {
+    "Id": 1,
+    "studentId": "1",
+    "classId": "1",
+    "assignmentId": "1",
+    "score": 85,
+    "maxScore": 100,
+    "percentage": 85,
+    "letterGrade": "B+",
+    "dateRecorded": "2024-11-16"
+  },
+  {
+    "Id": 2,
+    "studentId": "1",
+    "classId": "1",
+    "assignmentId": "2",
+    "score": 47,
+    "maxScore": 50,
+    "percentage": 94,
+    "letterGrade": "A",
+    "dateRecorded": "2024-11-09"
+  },
+  {
+    "Id": 3,
+    "studentId": "2",
+    "classId": "1",
+    "assignmentId": "1",
+    "score": 92,
+    "maxScore": 100,
+    "percentage": 92,
+    "letterGrade": "A-",
+    "dateRecorded": "2024-11-16"
+  },
+  {
+    "Id": 4,
+    "studentId": "2",
+    "classId": "2",
+    "assignmentId": "3",
+    "score": 68,
+    "maxScore": 75,
+    "percentage": 91,
+    "letterGrade": "A-",
+    "dateRecorded": "2024-11-13"
+  },
+  {
+    "Id": 5,
+    "studentId": "3",
+    "classId": "2",
+    "assignmentId": "3",
+    "score": 72,
+    "maxScore": 75,
+    "percentage": 96,
+    "letterGrade": "A+",
+    "dateRecorded": "2024-11-13"
+  },
+  {
+    "Id": 6,
+    "studentId": "4",
+    "classId": "3",
+    "assignmentId": "5",
+    "score": 78,
+    "maxScore": 100,
+    "percentage": 78,
+    "letterGrade": "C+",
+    "dateRecorded": "2024-11-19"
+  },
+  {
+    "Id": 7,
+    "studentId": "5",
+    "classId": "1",
+    "assignmentId": "1",
+    "score": 89,
+    "maxScore": 100,
+    "percentage": 89,
+    "letterGrade": "B+",
+    "dateRecorded": "2024-11-16"
+  },
+  {
+    "Id": 8,
+    "studentId": "6",
+    "classId": "4",
+    "assignmentId": "6",
+    "score": 165,
+    "maxScore": 200,
+    "percentage": 83,
+    "letterGrade": "B",
+    "dateRecorded": "2024-11-26"
+  }
+]

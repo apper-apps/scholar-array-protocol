@@ -1,0 +1,134 @@
+[
+  {
+    "Id": 1,
+    "firstName": "Emma",
+    "lastName": "Johnson",
+    "email": "emma.johnson@email.com",
+    "phone": "(555) 123-4567",
+    "gradeLevel": 10,
+    "dateOfBirth": "2008-03-15",
+    "enrollmentDate": "2023-08-15",
+    "status": "active"
+  },
+  {
+    "Id": 2,
+    "firstName": "Liam",
+    "lastName": "Smith",
+    "email": "liam.smith@email.com",
+    "phone": "(555) 234-5678",
+    "gradeLevel": 11,
+    "dateOfBirth": "2007-07-22",
+    "enrollmentDate": "2022-08-20",
+    "status": "active"
+  },
+  {
+    "Id": 3,
+    "firstName": "Olivia",
+    "lastName": "Williams",
+    "email": "olivia.williams@email.com",
+    "phone": "(555) 345-6789",
+    "gradeLevel": 9,
+    "dateOfBirth": "2009-01-10",
+    "enrollmentDate": "2024-08-12",
+    "status": "active"
+  },
+  {
+    "Id": 4,
+    "firstName": "Noah",
+    "lastName": "Brown",
+    "email": "noah.brown@email.com",
+    "phone": "(555) 456-7890",
+    "gradeLevel": 12,
+    "dateOfBirth": "2006-11-05",
+    "enrollmentDate": "2021-08-18",
+    "status": "active"
+  },
+  {
+    "Id": 5,
+    "firstName": "Ava",
+    "lastName": "Davis",
+    "email": "ava.davis@email.com",
+    "phone": "(555) 567-8901",
+    "gradeLevel": 10,
+    "dateOfBirth": "2008-05-28",
+    "enrollmentDate": "2023-08-15",
+    "status": "active"
+  },
+  {
+    "Id": 6,
+    "firstName": "William",
+    "lastName": "Miller",
+    "email": "william.miller@email.com",
+    "phone": "(555) 678-9012",
+    "gradeLevel": 11,
+    "dateOfBirth": "2007-09-14",
+    "enrollmentDate": "2022-08-20",
+    "status": "active"
+  },
+  {
+    "Id": 7,
+    "firstName": "Sophia",
+    "lastName": "Wilson",
+    "email": "sophia.wilson@email.com",
+    "phone": "(555) 789-0123",
+    "gradeLevel": 9,
+    "dateOfBirth": "2009-12-03",
+    "enrollmentDate": "2024-08-12",
+    "status": "active"
+  },
+  {
+    "Id": 8,
+    "firstName": "James",
+    "lastName": "Moore",
+    "email": "james.moore@email.com",
+    "phone": "(555) 890-1234",
+    "gradeLevel": 12,
+    "dateOfBirth": "2006-04-17",
+    "enrollmentDate": "2021-08-18",
+    "status": "active"
+  },
+  {
+    "Id": 9,
+    "firstName": "Isabella",
+    "lastName": "Taylor",
+    "email": "isabella.taylor@email.com",
+    "phone": "(555) 901-2345",
+    "gradeLevel": 10,
+    "dateOfBirth": "2008-08-09",
+    "enrollmentDate": "2023-08-15",
+    "status": "inactive"
+  },
+  {
+    "Id": 10,
+    "firstName": "Benjamin",
+    "lastName": "Anderson",
+    "email": "benjamin.anderson@email.com",
+    "phone": "(555) 012-3456",
+    "gradeLevel": 11,
+    "dateOfBirth": "2007-02-25",
+    "enrollmentDate": "2022-08-20",
+    "status": "active"
+  },
+  {
+    "Id": 11,
+    "firstName": "Charlotte",
+    "lastName": "Thomas",
+    "email": "charlotte.thomas@email.com",
+    "phone": "(555) 123-5678",
+    "gradeLevel": 9,
+    "dateOfBirth": "2009-06-12",
+    "enrollmentDate": "2024-08-12",
+    "status": "active"
+  },
+  {
+    "Id": 12,
+    "firstName": "Lucas",
+    "lastName": "Jackson",
+    "email": "lucas.jackson@email.com",
+    "phone": "(555) 234-6789",
+    "gradeLevel": 12,
+    "dateOfBirth": "2006-10-30",
+    "enrollmentDate": "2021-08-18",
+    "status": "graduated"
+  }
+]

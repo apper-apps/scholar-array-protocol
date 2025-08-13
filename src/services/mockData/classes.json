@@ -1,0 +1,56 @@
+[
+  {
+    "Id": 1,
+    "name": "Algebra II",
+    "subject": "Mathematics",
+    "period": "1st Period",
+    "room": "Room 205",
+    "year": "2024",
+    "semester": "Fall"
+  },
+  {
+    "Id": 2,
+    "name": "Biology I",
+    "subject": "Science",
+    "period": "2nd Period", 
+    "room": "Room 301",
+    "year": "2024",
+    "semester": "Fall"
+  },
+  {
+    "Id": 3,
+    "name": "English Literature",
+    "subject": "English",
+    "period": "3rd Period",
+    "room": "Room 102",
+    "year": "2024",
+    "semester": "Fall"
+  },
+  {
+    "Id": 4,
+    "name": "World History",
+    "subject": "History",
+    "period": "4th Period",
+    "room": "Room 210",
+    "year": "2024",
+    "semester": "Fall"
+  },
+  {
+    "Id": 5,
+    "name": "Chemistry",
+    "subject": "Science",
+    "period": "5th Period",
+    "room": "Room 305",
+    "year": "2024",
+    "semester": "Fall"
+  },
+  {
+    "Id": 6,
+    "name": "Pre-Calculus",
+    "subject": "Mathematics",
+    "period": "6th Period",
+    "room": "Room 207",
+    "year": "2024",
+    "semester": "Fall"
+  }
+]
