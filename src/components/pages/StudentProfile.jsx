@@ -78,22 +78,22 @@ const StudentProfile = () => {
   }, [id]);
 
   const getClassName = (classId) => {
-    const classItem = classes.find(c => c.Id.toString() === classId);
-    return classItem ? classItem.name : "Unknown Class";
+const classItem = classes.find(c => c.Id.toString() === classId);
+return classItem ? classItem.Name : "Unknown Class";
   };
 
   const getAssignmentName = (assignmentId) => {
-    const assignment = assignments.find(a => a.Id.toString() === assignmentId);
-    return assignment ? assignment.name : "Unknown Assignment";
+const assignment = assignments.find(a => a.Id.toString() === assignmentId);
+return assignment ? assignment.Name : "Unknown Assignment";
   };
 
   const getGradesByClass = () => {
     const gradesByClass = {};
     grades.forEach(grade => {
-      if (!gradesByClass[grade.classId]) {
-        gradesByClass[grade.classId] = [];
+if (!gradesByClass[grade.class_id_c?.Id || grade.class_id_c]) {
+gradesByClass[grade.class_id_c?.Id || grade.class_id_c] = [];
       }
-      gradesByClass[grade.classId].push(grade);
+gradesByClass[grade.class_id_c?.Id || grade.class_id_c].push(grade);
     });
     return gradesByClass;
   };
@@ -141,31 +141,31 @@ const StudentProfile = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-6 lg:space-y-0">
             <div className="flex items-center space-x-6">
               <Avatar 
-                initials={`${student.firstName[0]}${student.lastName[0]}`}
+initials={`${student.first_name_c?.[0] || ''}${student.last_name_c?.[0] || ''}`}
                 size="xl"
               />
               <div>
                 <h1 className="text-3xl font-bold gradient-text">
-                  {student.firstName} {student.lastName}
+{student.first_name_c} {student.last_name_c}
                 </h1>
                 <div className="flex items-center space-x-4 text-gray-600 mt-2">
                   <span className="flex items-center">
                     <ApperIcon name="Mail" className="h-4 w-4 mr-1" />
-                    {student.email}
+{student.email_c}
                   </span>
                   <span className="flex items-center">
                     <ApperIcon name="Phone" className="h-4 w-4 mr-1" />
-                    {student.phone}
+{student.phone_c}
                   </span>
                   <span className="flex items-center">
                     <ApperIcon name="Calendar" className="h-4 w-4 mr-1" />
-                    Grade {student.gradeLevel}
+Grade {student.grade_level_c}
                   </span>
                 </div>
                 <div className="flex items-center space-x-3 mt-3">
-                  <StatusPill status={student.status} />
+<StatusPill status={student.status_c} />
                   <span className="text-sm text-gray-500">
-                    Enrolled: {format(new Date(student.enrollmentDate), "MMM dd, yyyy")}
+Enrolled: {format(new Date(student.enrollment_date_c), "MMM dd, yyyy")}
                   </span>
                 </div>
               </div>
@@ -211,8 +211,8 @@ const StudentProfile = () => {
                 <div className="space-y-6">
                   {Object.entries(gradesByClass).map(([classId, classGrades]) => {
                     const className = getClassName(classId);
-                    const classAverage = Math.round(
-                      classGrades.reduce((sum, grade) => sum + grade.percentage, 0) / classGrades.length
+const classAverage = Math.round(
+                      classGrades.reduce((sum, grade) => sum + (grade.percentage_c || 0), 0) / classGrades.length
                     );
                     
                     return (
@@ -228,22 +228,22 @@ const StudentProfile = () => {
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                           {classGrades
-                            .sort((a, b) => new Date(b.dateRecorded) - new Date(a.dateRecorded))
+.sort((a, b) => new Date(b.date_recorded_c) - new Date(a.date_recorded_c))
                             .map((grade) => (
                             <div key={grade.Id} className="p-3 bg-gray-50 rounded-lg">
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-sm font-medium">{getAssignmentName(grade.assignmentId)}</span>
+<span className="text-sm font-medium">{getAssignmentName(grade.assignment_id_c?.Id || grade.assignment_id_c)}</span>
                                 <GradeBadge 
-                                  grade={grade.letterGrade} 
-                                  percentage={grade.percentage}
+                                  grade={grade.letter_grade_c} 
+                                  percentage={grade.percentage_c}
                                   size="sm"
                                 />
                               </div>
                               <div className="text-xs text-gray-500">
-                                {grade.score}/{grade.maxScore} points
+{grade.score_c}/{grade.max_score_c} points
                               </div>
                               <div className="text-xs text-gray-500">
-                                {format(new Date(grade.dateRecorded), "MMM dd, yyyy")}
+{format(new Date(grade.date_recorded_c), "MMM dd, yyyy")}
                               </div>
                             </div>
                           ))}
@@ -280,7 +280,7 @@ const StudentProfile = () => {
                   Present
                 </span>
                 <span className="font-medium">
-                  {attendance.filter(a => a.status === "present").length}
+{attendance.filter(a => a.status_c === "present").length}
                 </span>
               </div>
               <div className="flex items-center justify-between text-sm">
@@ -289,7 +289,7 @@ const StudentProfile = () => {
                   Late
                 </span>
                 <span className="font-medium">
-                  {attendance.filter(a => a.status === "late").length}
+{attendance.filter(a => a.status_c === "late").length}
                 </span>
               </div>
               <div className="flex items-center justify-between text-sm">
@@ -298,7 +298,7 @@ const StudentProfile = () => {
                   Absent
                 </span>
                 <span className="font-medium">
-                  {attendance.filter(a => a.status === "absent").length}
+{attendance.filter(a => a.status_c === "absent").length}
                 </span>
               </div>
               <div className="flex items-center justify-between text-sm">
@@ -307,7 +307,7 @@ const StudentProfile = () => {
                   Excused
                 </span>
                 <span className="font-medium">
-                  {attendance.filter(a => a.status === "excused").length}
+{attendance.filter(a => a.status_c === "excused").length}
                 </span>
               </div>
             </div>
@@ -345,16 +345,16 @@ const StudentProfile = () => {
               {recentGrades.map((grade) => (
                 <div key={grade.Id} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium">{getAssignmentName(grade.assignmentId)}</span>
+<span className="font-medium">{getAssignmentName(grade.assignment_id_c?.Id || grade.assignment_id_c)}</span>
                     <GradeBadge 
-                      grade={grade.letterGrade} 
-                      percentage={grade.percentage}
+                      grade={grade.letter_grade_c} 
+                      percentage={grade.percentage_c}
                       size="sm"
                     />
                   </div>
-                  <div className="text-sm text-gray-600 mb-1">{getClassName(grade.classId)}</div>
+<div className="text-sm text-gray-600 mb-1">{getClassName(grade.class_id_c?.Id || grade.class_id_c)}</div>
                   <div className="text-sm text-gray-500">
-                    {grade.score}/{grade.maxScore} points • {format(new Date(grade.dateRecorded), "MMM dd, yyyy")}
+{grade.score_c}/{grade.max_score_c} points • {format(new Date(grade.date_recorded_c), "MMM dd, yyyy")}
                   </div>
                 </div>
               ))}

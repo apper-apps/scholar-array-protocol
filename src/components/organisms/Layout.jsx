@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useSelector } from "react-redux";
 import Header from "@/components/organisms/Header";
 import Sidebar from "@/components/organisms/Sidebar";
 import MobileSidebar from "@/components/organisms/MobileSidebar";
 import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import { AuthContext } from "../../App";
 
 const Layout = ({ children }) => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const { logout } = useContext(AuthContext);
+  const { user } = useSelector((state) => state.user);
 
   return (
     <div className="min-h-screen bg-background-50 flex">
@@ -29,13 +34,21 @@ const Layout = ({ children }) => {
             >
               <ApperIcon name="Menu" className="h-6 w-6" />
             </button>
-            <div className="flex items-center">
+<div className="flex items-center">
               <div className="p-1.5 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg">
                 <ApperIcon name="GraduationCap" className="h-5 w-5 text-white" />
               </div>
               <span className="ml-2 text-lg font-bold gradient-text">Scholar Hub</span>
             </div>
-            <div className="w-10" /> {/* Spacer for centering */}
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={logout}
+              className="flex items-center"
+            >
+              <ApperIcon name="LogOut" className="h-4 w-4 mr-1" />
+              Logout
+            </Button>
           </div>
         </div>
         

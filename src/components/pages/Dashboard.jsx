@@ -54,16 +54,16 @@ const Dashboard = () => {
 
   const calculateStats = () => {
     const totalStudents = data.students.length;
-    const activeStudents = data.students.filter(s => s.status === "active").length;
+const activeStudents = data.students.filter(s => s.status_c === "active").length;
     const totalClasses = data.classes.length;
     
     // Calculate average grade
-    const averageGrade = data.grades.length > 0 
-      ? Math.round(data.grades.reduce((sum, grade) => sum + grade.percentage, 0) / data.grades.length)
+const averageGrade = data.grades.length > 0 
+      ? Math.round(data.grades.reduce((sum, grade) => sum + (grade.percentage_c || 0), 0) / data.grades.length)
       : 0;
     
     // Calculate attendance rate
-    const presentRecords = data.attendance.filter(a => a.status === "present" || a.status === "late").length;
+const presentRecords = data.attendance.filter(a => a.status_c === "present" || a.status_c === "late").length;
     const attendanceRate = data.attendance.length > 0 
       ? Math.round((presentRecords / data.attendance.length) * 100)
       : 100;
@@ -79,16 +79,16 @@ const Dashboard = () => {
 
   const getRecentActivity = () => {
     // Get recent grades (last 5)
-    const recentGrades = data.grades
-      .sort((a, b) => new Date(b.dateRecorded) - new Date(a.dateRecorded))
+const recentGrades = data.grades
+      .sort((a, b) => new Date(b.date_recorded_c) - new Date(a.date_recorded_c))
       .slice(0, 5)
       .map(grade => {
-        const student = data.students.find(s => s.Id.toString() === grade.studentId);
-        const classItem = data.classes.find(c => c.Id.toString() === grade.classId);
+const student = data.students.find(s => s.Id.toString() === grade.student_id_c?.Id || grade.student_id_c);
+        const classItem = data.classes.find(c => c.Id.toString() === grade.class_id_c?.Id || grade.class_id_c);
         return {
           ...grade,
-          studentName: student ? `${student.firstName} ${student.lastName}` : "Unknown Student",
-          className: classItem ? classItem.name : "Unknown Class"
+          studentName: student ? `${student.first_name_c} ${student.last_name_c}` : "Unknown Student",
+          className: classItem ? classItem.Name : "Unknown Class"
         };
       });
 
@@ -99,9 +99,12 @@ const Dashboard = () => {
     // Calculate student averages and get top 5
     const studentAverages = data.students
       .map(student => {
-        const studentGrades = data.grades.filter(g => g.studentId === student.Id.toString());
+const studentGrades = data.grades.filter(g => {
+          const gradeStudentId = g.student_id_c?.Id || g.student_id_c;
+          return gradeStudentId === student.Id.toString() || gradeStudentId === student.Id;
+        });
         const average = studentGrades.length > 0
-          ? studentGrades.reduce((sum, grade) => sum + grade.percentage, 0) / studentGrades.length
+          ? studentGrades.reduce((sum, grade) => sum + (grade.percentage_c || 0), 0) / studentGrades.length
           : 0;
         return {
           ...student,
@@ -201,8 +204,8 @@ const Dashboard = () => {
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <GradeBadge grade={grade.letterGrade} percentage={grade.percentage} />
-                      <span className="text-sm text-gray-500">{grade.dateRecorded}</span>
+<GradeBadge grade={grade.letter_grade_c} percentage={grade.percentage_c} />
+                      <span className="text-sm text-gray-500">{grade.date_recorded_c}</span>
                     </div>
                   </div>
                 ))}
@@ -232,21 +235,21 @@ const Dashboard = () => {
                   <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
                   Present
                 </span>
-                <span className="font-medium">{data.attendance.filter(a => a.status === "present").length}</span>
+<span className="font-medium">{data.attendance.filter(a => a.status_c === "present").length}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="flex items-center">
                   <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
                   Late
                 </span>
-                <span className="font-medium">{data.attendance.filter(a => a.status === "late").length}</span>
+<span className="font-medium">{data.attendance.filter(a => a.status_c === "late").length}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="flex items-center">
                   <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
                   Absent
                 </span>
-                <span className="font-medium">{data.attendance.filter(a => a.status === "absent").length}</span>
+<span className="font-medium">{data.attendance.filter(a => a.status_c === "absent").length}</span>
               </div>
             </div>
           </CardContent>
@@ -282,13 +285,13 @@ const Dashboard = () => {
                       <div className="flex items-center justify-center w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full">
                         {index + 1}
                       </div>
-                      <Avatar 
-                        initials={`${student.firstName[0]}${student.lastName[0]}`}
+<Avatar 
+                        initials={`${student.first_name_c?.[0] || ''}${student.last_name_c?.[0] || ''}`}
                         size="sm"
                       />
                       <div>
-                        <p className="font-medium text-gray-900">{student.firstName} {student.lastName}</p>
-                        <p className="text-sm text-gray-500">Grade {student.gradeLevel}</p>
+                        <p className="font-medium text-gray-900">{student.first_name_c} {student.last_name_c}</p>
+                        <p className="text-sm text-gray-500">Grade {student.grade_level_c}</p>
                       </div>
                     </div>
                     <GradeBadge 

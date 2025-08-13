@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/atoms/Card";
-import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
-import Select from "@/components/atoms/Select";
+import ApperIcon from "@/components/ApperIcon";
+import GradeBadge from "@/components/molecules/GradeBadge";
+import SearchBar from "@/components/molecules/SearchBar";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
-import GradeBadge from "@/components/molecules/GradeBadge";
-import SearchBar from "@/components/molecules/SearchBar";
+import Select from "@/components/atoms/Select";
+import Button from "@/components/atoms/Button";
 import Avatar from "@/components/atoms/Avatar";
-import ApperIcon from "@/components/ApperIcon";
-import gradeService from "@/services/api/gradeService";
-import studentService from "@/services/api/studentService";
-import classService from "@/services/api/classService";
+import Input from "@/components/atoms/Input";
+import Classes from "@/components/pages/Classes";
 import assignmentService from "@/services/api/assignmentService";
+import classService from "@/services/api/classService";
+import studentService from "@/services/api/studentService";
+import gradeService from "@/services/api/gradeService";
 
 const Grades = () => {
   const [grades, setGrades] = useState([]);
@@ -75,23 +76,23 @@ const Grades = () => {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(grade => {
-        const student = getStudentById(grade.studentId);
-        const assignment = getAssignmentById(grade.assignmentId);
+const student = getStudentById(grade.student_id_c?.Id || grade.student_id_c);
+        const assignment = getAssignmentById(grade.assignment_id_c?.Id || grade.assignment_id_c);
         return (
           student && (
-            student.firstName.toLowerCase().includes(query) ||
-            student.lastName.toLowerCase().includes(query)
+            student.first_name_c?.toLowerCase().includes(query) ||
+            student.last_name_c?.toLowerCase().includes(query)
           )
-        ) || (assignment && assignment.name.toLowerCase().includes(query));
+        ) || (assignment && assignment.Name?.toLowerCase().includes(query));
       });
     }
 
     // Class filter
     if (classFilter !== "all") {
-      filtered = filtered.filter(grade => grade.classId === classFilter);
+filtered = filtered.filter(grade => (grade.class_id_c?.Id || grade.class_id_c) === classFilter);
     }
 
-    setFilteredGrades(filtered.sort((a, b) => new Date(b.dateRecorded) - new Date(a.dateRecorded)));
+setFilteredGrades(filtered.sort((a, b) => new Date(b.date_recorded_c) - new Date(a.date_recorded_c)));
   };
 
   const getStudentById = (id) => {
@@ -107,14 +108,14 @@ const Grades = () => {
   };
 
   const getAssignmentsByClass = (classId) => {
-    return assignments.filter(a => a.classId.toString() === classId.toString());
+return assignments.filter(a => (a.class_id_c?.Id || a.class_id_c).toString() === classId.toString());
   };
 
   const getStudentsByClass = (classId) => {
     // Get students who have grades in this class
-    const studentIdsInClass = grades
-      .filter(g => g.classId.toString() === classId.toString())
-      .map(g => g.studentId);
+const studentIdsInClass = grades
+      .filter(g => (g.class_id_c?.Id || g.class_id_c).toString() === classId.toString())
+      .map(g => g.student_id_c?.Id || g.student_id_c);
     
     const uniqueIds = [...new Set(studentIdsInClass)];
     return students.filter(s => uniqueIds.includes(s.Id.toString()));
@@ -123,8 +124,10 @@ const Grades = () => {
   const handleAddGrade = async (e) => {
     e.preventDefault();
     try {
-      const gradeData = {
-        ...newGrade,
+const gradeData = {
+        studentId: newGrade.studentId,
+        classId: newGrade.classId,
+        assignmentId: newGrade.assignmentId,
         score: parseFloat(newGrade.score),
         maxScore: parseFloat(newGrade.maxScore)
       };
@@ -160,20 +163,20 @@ const Grades = () => {
   const exportGrades = () => {
     const csvData = [
       ["Student", "Class", "Assignment", "Score", "Max Score", "Percentage", "Letter Grade", "Date"],
-      ...filteredGrades.map(grade => {
-        const student = getStudentById(grade.studentId);
-        const classItem = getClassById(grade.classId);
-        const assignment = getAssignmentById(grade.assignmentId);
+...filteredGrades.map(grade => {
+        const student = getStudentById(grade.student_id_c?.Id || grade.student_id_c);
+        const classItem = getClassById(grade.class_id_c?.Id || grade.class_id_c);
+        const assignment = getAssignmentById(grade.assignment_id_c?.Id || grade.assignment_id_c);
         
         return [
-          student ? `${student.firstName} ${student.lastName}` : "Unknown",
-          classItem ? classItem.name : "Unknown",
-          assignment ? assignment.name : "Unknown",
-          grade.score,
-          grade.maxScore,
-          grade.percentage,
-          grade.letterGrade,
-          grade.dateRecorded
+          student ? `${student.first_name_c} ${student.last_name_c}` : "Unknown Student",
+          classItem ? classItem.Name : "Unknown",
+          assignment ? assignment.Name : "Unknown",
+          grade.score_c,
+          grade.max_score_c,
+          grade.percentage_c,
+          grade.letter_grade_c,
+          grade.date_recorded_c
         ];
       })
     ];
@@ -238,7 +241,7 @@ const Grades = () => {
               <option value="all">All Classes</option>
               {classes.map(classItem => (
                 <option key={classItem.Id} value={classItem.Id.toString()}>
-                  {classItem.name}
+{classItem.Name}
                 </option>
               ))}
             </Select>
@@ -268,9 +271,9 @@ const Grades = () => {
           ) : (
             <div className="space-y-2">
               {filteredGrades.map((grade) => {
-                const student = getStudentById(grade.studentId);
-                const classItem = getClassById(grade.classId);
-                const assignment = getAssignmentById(grade.assignmentId);
+const student = getStudentById(grade.student_id_c?.Id || grade.student_id_c);
+                const classItem = getClassById(grade.class_id_c?.Id || grade.class_id_c);
+                const assignment = getAssignmentById(grade.assignment_id_c?.Id || grade.assignment_id_c);
                 
                 return (
                   <div
@@ -278,18 +281,18 @@ const Grades = () => {
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     <div className="flex items-center space-x-4">
-                      <Avatar
-                        initials={student ? `${student.firstName[0]}${student.lastName[0]}` : "?"}
+<Avatar
+                        initials={student ? `${student.first_name_c?.[0] || ''}${student.last_name_c?.[0] || ''}` : "?"}
                         size="default"
                       />
                       <div>
                         <h3 className="font-semibold text-gray-900">
-                          {student ? `${student.firstName} ${student.lastName}` : "Unknown Student"}
+{student ? `${student.first_name_c} ${student.last_name_c}` : "Unknown Student"}
                         </h3>
                         <div className="flex items-center space-x-2 text-sm text-gray-500">
-                          <span>{classItem ? classItem.name : "Unknown Class"}</span>
+                          <span>{classItem ? classItem.Name : "Unknown Class"}</span>
                           <span>•</span>
-                          <span>{assignment ? assignment.name : "Unknown Assignment"}</span>
+                          <span>{assignment ? assignment.Name : "Unknown Assignment"}</span>
                         </div>
                       </div>
                     </div>
@@ -297,13 +300,13 @@ const Grades = () => {
                     <div className="flex items-center space-x-4">
                       <div className="text-right">
                         <div className="text-lg font-semibold gradient-text">
-                          {grade.score}/{grade.maxScore}
+{grade.score_c}/{grade.max_score_c}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {grade.dateRecorded}
+                          {grade.date_recorded_c}
                         </div>
                       </div>
-                      <GradeBadge grade={grade.letterGrade} percentage={grade.percentage} />
+<GradeBadge grade={grade.letter_grade_c} percentage={grade.percentage_c} />
                       <button
                         onClick={() => handleDeleteGrade(grade.Id)}
                         className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
@@ -345,7 +348,7 @@ const Grades = () => {
                   <option value="">Select Class</option>
                   {classes.map(classItem => (
                     <option key={classItem.Id} value={classItem.Id.toString()}>
-                      {classItem.name}
+{classItem.Name}
                     </option>
                   ))}
                 </Select>
@@ -357,9 +360,9 @@ const Grades = () => {
                     onChange={(e) => {
                       const assignment = getAssignmentById(e.target.value);
                       setNewGrade(prev => ({ 
-                        ...prev, 
+...prev, 
                         assignmentId: e.target.value,
-                        maxScore: assignment ? assignment.totalPoints : 100
+                        maxScore: assignment ? assignment.total_points_c : 100
                       }));
                     }}
                     required
@@ -367,7 +370,7 @@ const Grades = () => {
                     <option value="">Select Assignment</option>
                     {getAssignmentsByClass(newGrade.classId).map(assignment => (
                       <option key={assignment.Id} value={assignment.Id.toString()}>
-                        {assignment.name} ({assignment.totalPoints} pts)
+{assignment.Name} ({assignment.total_points_c} pts)
                       </option>
                     ))}
                   </Select>
@@ -383,7 +386,7 @@ const Grades = () => {
                     <option value="">Select Student</option>
                     {students.map(student => (
                       <option key={student.Id} value={student.Id.toString()}>
-                        {student.firstName} {student.lastName}
+{student.first_name_c} {student.last_name_c}
                       </option>
                     ))}
                   </Select>

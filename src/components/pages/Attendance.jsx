@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/atoms/Card";
-import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
-import Select from "@/components/atoms/Select";
+import ApperIcon from "@/components/ApperIcon";
+import StatusPill from "@/components/molecules/StatusPill";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
-import StatusPill from "@/components/molecules/StatusPill";
+import Select from "@/components/atoms/Select";
+import Button from "@/components/atoms/Button";
 import Avatar from "@/components/atoms/Avatar";
-import ApperIcon from "@/components/ApperIcon";
-import attendanceService from "@/services/api/attendanceService";
-import studentService from "@/services/api/studentService";
+import Input from "@/components/atoms/Input";
 import classService from "@/services/api/classService";
+import studentService from "@/services/api/studentService";
+import attendanceService from "@/services/api/attendanceService";
 
 const Attendance = () => {
   const [attendance, setAttendance] = useState([]);
@@ -62,16 +62,16 @@ const Attendance = () => {
     }
   }, [selectedClass, selectedDate, attendance]);
 
-  const loadClassAttendance = () => {
+const loadClassAttendance = () => {
     const classAttendance = {};
-    const todayAttendance = attendance.filter(record => 
-      record.date === selectedDate && record.classId === selectedClass
+    const todayAttendance = attendance.filter(record =>
+      record.date_c === selectedDate && (record.class_id_c?.Id || record.class_id_c) === selectedClass
     );
     
     todayAttendance.forEach(record => {
-      classAttendance[record.studentId] = {
-        status: record.status,
-        notes: record.notes,
+      classAttendance[record.student_id_c?.Id || record.student_id_c] = {
+        status: record.status_c,
+        notes: record.notes_c,
         id: record.Id
       };
     });
@@ -98,19 +98,19 @@ const Attendance = () => {
       // Update local state
       setAttendanceData(prev => ({
         ...prev,
-        [studentId]: {
-          status: record.status,
-          notes: record.notes,
+[studentId]: {
+          status: record.status_c,
+          notes: record.notes_c,
           id: record.Id
         }
       }));
       
       // Update attendance array
       setAttendance(prev => {
-        const existingIndex = prev.findIndex(a => 
-          a.studentId === studentId.toString() && 
-          a.classId === selectedClass && 
-          a.date === selectedDate
+const existingIndex = prev.findIndex(a => 
+          (a.student_id_c?.Id || a.student_id_c) === studentId.toString() && 
+          (a.class_id_c?.Id || a.class_id_c) === selectedClass && 
+          a.date_c === selectedDate
         );
         
         if (existingIndex !== -1) {
@@ -128,10 +128,10 @@ const Attendance = () => {
     }
   };
 
-  const handleMarkAllPresent = async () => {
+const handleMarkAllPresent = async () => {
     try {
       const classStudents = getStudentsInClass();
-      const promises = classStudents.map(student => 
+      const promises = classStudents.map(student =>
         attendanceService.markAttendance(student.Id, selectedClass, selectedDate, "present", "")
       );
       
@@ -173,7 +173,7 @@ const Attendance = () => {
         return [
           selectedDate,
           classItem ? classItem.name : "Unknown",
-          `${student.firstName} ${student.lastName}`,
+`${student.first_name_c} ${student.last_name_c}`,
           record ? record.status : "unmarked",
           record ? record.notes : ""
         ];
@@ -239,9 +239,9 @@ const Attendance = () => {
               value={selectedClass}
               onChange={(e) => setSelectedClass(e.target.value)}
             >
-              {classes.map(classItem => (
+{classes.map(classItem => (
                 <option key={classItem.Id} value={classItem.Id.toString()}>
-                  {classItem.name} - {classItem.period}
+                  {classItem.name} - {classItem.period_c}
                 </option>
               ))}
             </Select>
@@ -323,15 +323,15 @@ const Attendance = () => {
                   >
                     <div className="flex items-center space-x-4">
                       <Avatar
-                        initials={`${student.firstName[0]}${student.lastName[0]}`}
+initials={`${student.first_name_c?.[0] || ''}${student.last_name_c?.[0] || ''}`}
                         size="default"
                       />
                       <div>
                         <h3 className="font-semibold text-gray-900">
-                          {student.firstName} {student.lastName}
+                          {student.first_name_c} {student.last_name_c}
                         </h3>
                         <div className="text-sm text-gray-500">
-                          Grade {student.gradeLevel} • {student.email}
+                          Grade {student.grade_level_c} • {student.email_c}
                         </div>
                       </div>
                     </div>

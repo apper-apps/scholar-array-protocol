@@ -1,83 +1,237 @@
-import classesData from "@/services/mockData/classes.json";
-
 class ClassService {
   constructor() {
-    this.classes = [...classesData];
+    // Initialize ApperClient
+    const { ApperClient } = window.ApperSDK;
+    this.apperClient = new ApperClient({
+      apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+      apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+    });
+    this.tableName = "class_c";
   }
 
   async getAll() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([...this.classes]);
-      }, 300);
-    });
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "subject_c" } },
+          { field: { Name: "period_c" } },
+          { field: { Name: "room_c" } },
+          { field: { Name: "year_c" } },
+          { field: { Name: "semester_c" } }
+        ]
+      };
+      
+      const response = await this.apperClient.fetchRecords(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+      
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching classes:", error?.response?.data?.message);
+        throw new Error(error.response.data.message);
+      } else {
+        console.error("Error fetching classes:", error.message);
+        throw error;
+      }
+    }
   }
 
   async getById(id) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const classItem = this.classes.find(c => c.Id === parseInt(id));
-        if (classItem) {
-          resolve({ ...classItem });
-        } else {
-          reject(new Error("Class not found"));
-        }
-      }, 250);
-    });
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "subject_c" } },
+          { field: { Name: "period_c" } },
+          { field: { Name: "room_c" } },
+          { field: { Name: "year_c" } },
+          { field: { Name: "semester_c" } }
+        ]
+      };
+      
+      const response = await this.apperClient.getRecordById(this.tableName, parseInt(id), params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+      
+      return response.data;
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error(`Error fetching class with ID ${id}:`, error?.response?.data?.message);
+        throw new Error(error.response.data.message);
+      } else {
+        console.error(`Error fetching class with ID ${id}:`, error.message);
+        throw error;
+      }
+    }
   }
 
   async create(classData) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const maxId = Math.max(...this.classes.map(c => c.Id), 0);
-        const newClass = {
-          ...classData,
-          Id: maxId + 1
-        };
-        this.classes.push(newClass);
-        resolve({ ...newClass });
-      }, 400);
-    });
+    try {
+      const params = {
+        records: [{
+          Name: classData.name,
+          subject_c: classData.subject,
+          period_c: classData.period,
+          room_c: classData.room,
+          year_c: parseInt(classData.year),
+          semester_c: classData.semester
+        }]
+      };
+      
+      const response = await this.apperClient.createRecord(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+      
+      if (response.results) {
+        const successfulRecords = response.results.filter(result => result.success);
+        const failedRecords = response.results.filter(result => !result.success);
+        
+        if (failedRecords.length > 0) {
+          console.error(`Failed to create class ${failedRecords.length} records:${JSON.stringify(failedRecords)}`);
+          throw new Error(failedRecords[0].message || "Failed to create class");
+        }
+        
+        return successfulRecords[0].data;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error creating class:", error?.response?.data?.message);
+        throw new Error(error.response.data.message);
+      } else {
+        console.error("Error creating class:", error.message);
+        throw error;
+      }
+    }
   }
 
   async update(id, classData) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const index = this.classes.findIndex(c => c.Id === parseInt(id));
-        if (index !== -1) {
-          this.classes[index] = { ...this.classes[index], ...classData };
-          resolve({ ...this.classes[index] });
-        } else {
-          reject(new Error("Class not found"));
+    try {
+      const updateData = {
+        Id: parseInt(id)
+      };
+      
+      // Only include updateable fields
+      if (classData.name !== undefined) updateData.Name = classData.name;
+      if (classData.subject !== undefined) updateData.subject_c = classData.subject;
+      if (classData.period !== undefined) updateData.period_c = classData.period;
+      if (classData.room !== undefined) updateData.room_c = classData.room;
+      if (classData.year !== undefined) updateData.year_c = parseInt(classData.year);
+      if (classData.semester !== undefined) updateData.semester_c = classData.semester;
+      
+      const params = {
+        records: [updateData]
+      };
+      
+      const response = await this.apperClient.updateRecord(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+      
+      if (response.results) {
+        const successfulUpdates = response.results.filter(result => result.success);
+        const failedUpdates = response.results.filter(result => !result.success);
+        
+        if (failedUpdates.length > 0) {
+          console.error(`Failed to update class ${failedUpdates.length} records:${JSON.stringify(failedUpdates)}`);
+          throw new Error(failedUpdates[0].message || "Failed to update class");
         }
-      }, 350);
-    });
+        
+        return successfulUpdates[0].data;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error updating class:", error?.response?.data?.message);
+        throw new Error(error.response.data.message);
+      } else {
+        console.error("Error updating class:", error.message);
+        throw error;
+      }
+    }
   }
 
   async delete(id) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const index = this.classes.findIndex(c => c.Id === parseInt(id));
-        if (index !== -1) {
-          const deletedClass = this.classes.splice(index, 1)[0];
-          resolve({ ...deletedClass });
-        } else {
-          reject(new Error("Class not found"));
+    try {
+      const params = {
+        RecordIds: [parseInt(id)]
+      };
+      
+      const response = await this.apperClient.deleteRecord(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+      
+      if (response.results) {
+        const failedDeletions = response.results.filter(result => !result.success);
+        
+        if (failedDeletions.length > 0) {
+          console.error(`Failed to delete class ${failedDeletions.length} records:${JSON.stringify(failedDeletions)}`);
+          throw new Error(failedDeletions[0].message || "Failed to delete class");
         }
-      }, 300);
-    });
+        
+        return true;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error deleting class:", error?.response?.data?.message);
+        throw new Error(error.response.data.message);
+      } else {
+        console.error("Error deleting class:", error.message);
+        throw error;
+      }
+    }
   }
 
   async getBySubject(subject) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const filtered = this.classes.filter(c => 
-          c.subject.toLowerCase() === subject.toLowerCase()
-        );
-        resolve([...filtered]);
-      }, 200);
-    });
-  }
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "subject_c" } },
+          { field: { Name: "period_c" } },
+          { field: { Name: "room_c" } },
+          { field: { Name: "year_c" } },
+          { field: { Name: "semester_c" } }
+        ],
+        where: [{
+          FieldName: "subject_c",
+          Operator: "EqualTo",
+          Values: [subject]
+        }]
+      };
+      
+      const response = await this.apperClient.fetchRecords(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+      
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching classes by subject:", error?.response?.data?.message);
+        throw new Error(error.response.data.message);
+      } else {
+        console.error("Error fetching classes by subject:", error.message);
+        throw error;
+      }
+    }
+}
 }
 
 export default new ClassService();

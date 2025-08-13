@@ -42,10 +42,10 @@ const Classes = () => {
       ]);
       
       for (const classItem of data) {
-        const classGrades = allGrades.filter(g => g.classId === classItem.Id.toString());
-        const uniqueStudentIds = [...new Set(classGrades.map(g => g.studentId))];
-        const average = classGrades.length > 0
-          ? Math.round(classGrades.reduce((sum, grade) => sum + grade.percentage, 0) / classGrades.length)
+const classGrades = allGrades.filter(g => (g.class_id_c?.Id || g.class_id_c) === classItem.Id.toString());
+const uniqueStudentIds = [...new Set(classGrades.map(g => g.student_id_c?.Id || g.student_id_c))];
+const average = classGrades.length > 0
+          ? Math.round(classGrades.reduce((sum, grade) => sum + (grade.percentage_c || 0), 0) / classGrades.length)
           : 0;
           
         stats[classItem.Id] = {
@@ -161,7 +161,7 @@ const Classes = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {classes.map((classItem) => {
             const stats = classStats[classItem.Id] || { studentCount: 0, averageGrade: 0, totalAssignments: 0 };
-            const subjectColor = getSubjectColor(classItem.subject);
+const subjectColor = getSubjectColor(classItem.subject_c);
             
             return (
               <Card key={classItem.Id} className="hover-lift cursor-pointer group">
@@ -177,13 +177,13 @@ const Classes = () => {
                         subjectColor === 'danger' ? 'bg-red-100 text-red-600' :
                         'bg-gray-100 text-gray-600'
                       }`}>
-                        <ApperIcon name={getSubjectIcon(classItem.subject)} className="h-5 w-5" />
+<ApperIcon name={getSubjectIcon(classItem.subject_c)} className="h-5 w-5" />
                       </div>
                       <div>
                         <CardTitle className="text-lg group-hover:text-primary-600 transition-colors">
-                          {classItem.name}
+                          {classItem.Name}
                         </CardTitle>
-                        <p className="text-sm text-gray-600">{classItem.subject}</p>
+                        <p className="text-sm text-gray-600">{classItem.subject_c}</p>
                       </div>
                     </div>
                     <button
